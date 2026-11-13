@@ -350,7 +350,15 @@ document.getElementById("enviar").onclick = function(){
     pagina: location.href
   };
   if(modo === "govbr"){ payload.pdf_assinado = pdfAssinadoB64; payload.pdf_nome = pdfAssinadoNome; }
-  else { payload.assinatura = cv.toDataURL("image/png"); }
+  else {
+    // JPEG com fundo branco: robusto para o decodificador do webhook e ~5x menor
+    var tmp = document.createElement("canvas");
+    tmp.width = cv.width; tmp.height = cv.height;
+    var tctx = tmp.getContext("2d");
+    tctx.fillStyle = "#ffffff"; tctx.fillRect(0,0,tmp.width,tmp.height);
+    tctx.drawImage(cv,0,0);
+    payload.assinatura = tmp.toDataURL("image/jpeg", 0.75);
+  }
   fetch(WEBHOOK_URL + "?secret=" + WEBHOOK_SECRET, {
     method: "POST",
     mode: "no-cors",
