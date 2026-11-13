@@ -5,16 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Treinamento — Protocolo Clínico e Documentação | Tríades Espaço Terapêutico</title>
 <style>
-  :root{
-    --vinho:#5E1A16; --vinho2:#7A2A24; --creme:#FBF6EE; --tinta:#2A2320;
-    --ok:#2E7D32; --erro:#C62828;
-  }
+  :root{--vinho:#5E1A16;--creme:#FBF6EE;--tinta:#2A2320;--ok:#2E7D32;--erro:#C62828}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--creme);color:var(--tinta);line-height:1.55}
   .faixa{background:var(--vinho);color:#fff;padding:26px 18px 30px;text-align:center}
   .faixa .logo{height:64px;margin-bottom:10px}
   .faixa h1{font-size:1.35rem;font-weight:700;letter-spacing:.4px}
-  .passo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;font-size:.82rem;margin:12px 4px 0}
+  .faixa p{opacity:.92;font-size:.92rem;margin-top:6px}
+  .passos{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .passo{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border-radius:20px;padding:6px 14px;font-size:.8rem}
   .passo.ativo{background:#fff;color:var(--vinho);font-weight:700}
   .passo.feito{background:#2E7D32;color:#fff}
   main{max-width:860px;margin:0 auto;padding:22px 16px 60px}
@@ -32,5 +31,191 @@
   .nota{font-size:.85rem;color:#6b5d55;margin-top:8px}
   .bloco-form{display:none}
   .bloco-form.visivel{display:block;animation:ap .4s ease}
-  @keyframes ap{from{opacity:0;transform:translateY(8px)}to{opacity:1; load...}}
-  label{display:block;font-weight:600;font-size:.9rem;mar
+  @keyframes ap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 5px}
+  input[type=text]{width:100%;padding:11px 12px;border:1.5px solid #d8cfc2;border-radius:9px;font-size:1rem;background:#fffdf9}
+  input[type=text]:focus{outline:none;border-color:var(--vinho)}
+  .aviso{background:#FFF8E1;border:1px solid #F0DFA0;border-radius:9px;padding:10px 12px;font-size:.85rem;margin-top:10px}
+  canvas{width:100%;height:180px;border:1.5px dashed #c9b8a8;border-radius:9px;background:#fffdf9;touch-action:none;cursor:crosshair}
+  .botoes-canvas{display:flex;gap:8px;margin-top:8px}
+  button{border:0;border-radius:9px;padding:12px 18px;font-size:1rem;font-weight:600;cursor:pointer}
+  .btn-sec{background:#efe6da;color:var(--vinho)}
+  .btn-pri{background:var(--vinho);color:#fff;width:100%;padding:15px;font-size:1.05rem;margin-top:18px}
+  .btn-pri:disabled{opacity:.45;cursor:not-allowed}
+  .erro{color:var(--erro);font-size:.85rem;margin-top:8px;display:none}
+  .final{display:none;text-align:center;padding:30px 10px}
+  .final.visivel{display:block}
+  .final .selo{font-size:3rem}
+  .final h2{color:var(--ok);justify-content:center}
+  .proto{font-family:monospace;background:#f4ede2;padding:4px 10px;border-radius:6px;font-weight:700;letter-spacing:1px}
+  footer{max-width:860px;margin:0 auto;padding:0 16px 30px;text-align:center;font-size:.75rem;color:#9a8b80}
+</style>
+</head>
+<body>
+<div class="faixa">
+  <img class="logo" src="logo.png" alt="Tríades Espaço Terapêutico">
+  <h1>TREINAMENTO — PROTOCOLO CLÍNICO E DOCUMENTAÇÃO</h1>
+  <p>Tríades Espaço Terapêutico · Corpo técnico · 2026</p>
+  <div class="passos">
+    <span class="passo ativo" id="p1">1 · Teoria</span>
+    <span class="passo" id="p2">2 · Vídeo</span>
+    <span class="passo" id="p3">3 · Assinatura</span>
+  </div>
+</div>
+<main>
+
+  <div class="card" id="card1">
+    <h2><span class="num">1</span> Treinamento teórico</h2>
+    <p>Este treinamento registra a sua ciência sobre as regras de <span class="b">registro clínico e documentação</span> da clínica. Leia com atenção as regras abaixo — elas valem para todas as sessões, em todos os polos.</p>
+    <ul class="regras">
+      <li><span class="b">Registre no mesmo dia.</span> A evolução é feita no dia da sessão, com data e horário compatíveis com o atendimento realizado.</li>
+      <li class="vedado"><span class="b">Não registre sessão que não aconteceu.</span> Registro retroativo e lançamento de sessão não executada são vedados.</li>
+      <li class="vedado"><span class="b">Não registre sessões sobrepostas.</span> O mesmo paciente não pode ter duas sessões no mesmo dia e horário — nem na mesma guia, nem em guias diferentes.</li>
+      <li><span class="b">Ausência é ausência.</span> Sessão não realizada é registrada como falta, nunca como sessão executada.</li>
+      <li><span class="b">Guia = realidade.</span> O que vai para a guia/faturamento precisa refletir exatamente o que foi executado.</li>
+      <li><span class="b">Assine o que é seu.</span> Só assina o profissional que executou o atendimento.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="card2">
+    <h2><span class="num">2</span> Vídeo de treinamento</h2>
+    <div class="video-wrap">
+      <iframe id="video" title="Vídeo de treinamento" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+    <p class="nota" id="nota-video">Assista ao vídeo até o fim — a assinatura do termo libera automaticamente quando o vídeo terminar.</p>
+  </div>
+
+  <div class="card bloco-form" id="card3">
+    <h2><span class="num">3</span> Termo de ciência e concordância</h2>
+    <p>Ao assinar, você declara que <span class="b">leu as regras, assistiu ao vídeo e está ciente e de acordo</span> com o protocolo de documentação clínica da Tríades.</p>
+    <label for="nome">Nome completo</label>
+    <input type="text" id="nome" autocomplete="name" placeholder="Como consta no seu contrato">
+    <label for="cpf">CPF</label>
+    <input type="text" id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00">
+    <label>Sua assinatura (desenhe no espaço abaixo)</label>
+    <canvas id="canvas" width="800" height="260"></canvas>
+    <div class="botoes-canvas">
+      <button type="button" class="btn-sec" id="limpar">Limpar assinatura</button>
+    </div>
+    <div class="aviso">Sua assinatura tem caráter de <span class="b">declaração formal de ciência</span> e fica registrada com data, hora e protocolo, valendo como registro de treinamento para fins de auditoria.</div>
+    <div class="erro" id="erro"></div>
+    <button class="btn-pri" id="enviar">Assinar termo e enviar</button>
+  </div>
+
+  <div class="card final" id="card4">
+    <div class="selo">✅</div>
+    <h2>Termo assinado com sucesso</h2>
+    <p>Recebemos a sua assinatura. Guarde o número do protocolo — ele comprova a sua participação neste treinamento:</p>
+    <p style="margin:14px 0"><span class="proto" id="protocolo">—</span></p>
+    <p class="nota">O documento assinado já foi encaminhado à gestão da clínica.</p>
+  </div>
+
+</main>
+<footer>Tríades Espaço Terapêutico · Documento interno · v1 — novembro/2026</footer>
+
+<script>
+/* ====== CONFIGURAÇÃO ====== */
+var WEBHOOK_URL = "https://maestro.adapta.one/webhooks/generic/461e8c6253ae130a5811eb66ad336c42b7597436f1566a7e4d0d7e72b5d2ccac";
+var WEBHOOK_SECRET = "27b4a8d643b502c603b6fa7aece5cc965f4e7572d99deb19911d3c11fb577309";
+var VIDEO_URL = "COLOQUE_A_URL_DO_VIDEO_AQUI";
+
+/* ====== PASSOS ====== */
+function passo(n, estado){
+  var el = document.getElementById("p"+n);
+  el.className = "passo" + (estado ? " "+estado : "");
+}
+
+/* ====== LIBERAÇÃO DO FORMULÁRIO ====== */
+var liberado = false;
+function liberarFormulario(){
+  if(liberado) return;
+  liberado = true;
+  passo(2,"feito"); passo(3,"ativo");
+  document.getElementById("card3").classList.add("visivel");
+  document.getElementById("nota-video").textContent = "Vídeo concluído — agora você pode assinar o termo.";
+  try{ document.getElementById("card3").scrollIntoView({behavior:"smooth"}); }catch(e){}
+}
+function iniciarVideo(){
+  var v = document.getElementById("video");
+  if(VIDEO_URL.indexOf("COLOQUE") > -1){ return; }
+  if(VIDEO_URL.indexOf("youtube")>-1 || VIDEO_URL.indexOf("youtu.be")>-1){
+    v.src = "https://www.youtube-nocookie.com/embed/" + VIDEO_URL.split(/(v=|be\/|embed\/)/).pop().substring(0,11) + "?rel=0&playsinline=1";
+  } else {
+    v.src = VIDEO_URL;
+  }
+  v.addEventListener("ended", liberarFormulario);
+}
+window.addEventListener("load", iniciarVideo);
+
+/* ====== ASSINATURA NO CANVAS ====== */
+var cv = document.getElementById("canvas"), ctx = cv.getContext("2d");
+var desenhando = false, temTinta = false;
+function pos(e){
+  var r = cv.getBoundingClientRect();
+  var p = e.touches ? e.touches[0] : e;
+  return { x:(p.clientX-r.left)*cv.width/r.width, y:(p.clientY-r.top)*cv.height/r.height };
+}
+function inicio(e){ desenhando=true; temTinta=true; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+function movimento(e){
+  if(!desenhando) return;
+  var p=pos(e);
+  ctx.lineTo(p.x,p.y);
+  ctx.lineWidth=3; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.strokeStyle="#1a1a2e";
+  ctx.stroke(); e.preventDefault();
+}
+function fim(){ desenhando=false; }
+cv.addEventListener("mousedown",inicio); cv.addEventListener("mousemove",movimento);
+window.addEventListener("mouseup",fim);
+cv.addEventListener("touchstart",inicio,{passive:false});
+cv.addEventListener("touchmove",movimento,{passive:false});
+window.addEventListener("touchend",fim);
+document.getElementById("limpar").onclick=function(){ ctx.clearRect(0,0,cv.width,cv.height); temTinta=false; };
+
+/* ====== MÁSCARA CPF ====== */
+document.getElementById("cpf").addEventListener("input", function(){
+  var v = this.value.replace(/\D/g,"").slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/,"$1.$2.$3-$4");
+  this.value = v;
+});
+
+/* ====== ENVIO ====== */
+function protocolo(){
+  var d = new Date();
+  function p(n){ return String(n).padStart(2,"0"); }
+  return "TRT-" + d.getFullYear() + p(d.getMonth()+1) + p(d.getDate()) + "-" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+}
+document.getElementById("enviar").onclick = function(){
+  var nome = document.getElementById("nome").value.trim();
+  var cpf  = document.getElementById("cpf").value.trim();
+  var erro = document.getElementById("erro");
+  erro.style.display = "none";
+  if(nome.split(" ").filter(Boolean).length < 2){ erro.textContent="Digite o nome completo."; erro.style.display="block"; return; }
+  if(cpf.replace(/\D/g,"").length !== 11){ erro.textContent="Digite o CPF com 11 números."; erro.style.display="block"; return; }
+  if(!temTinta){ erro.textContent="Desenhe a sua assinatura no quadro."; erro.style.display="block"; return; }
+  var btn = this; btn.disabled = true; btn.textContent = "Enviando…";
+  var payload = {
+    tipo: "assinatura_treinamento",
+    protocolo: protocolo(),
+    nome: nome, cpf: cpf,
+    assinatura: cv.toDataURL("image/png"),
+    data_envio: new Date().toISOString(),
+    versao_treinamento: "v1 — 11/2026",
+    user_agent: navigator.userAgent,
+    pagina: location.href
+  };
+  fetch(WEBHOOK_URL + "?secret=" + WEBHOOK_SECRET, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  }).finally(function(){
+    passo(3,"feito");
+    document.getElementById("card3").classList.remove("visivel");
+    document.getElementById("card4").classList.add("visivel");
+    document.getElementById("protocolo").textContent = payload.protocolo;
+    try{ document.getElementById("card4").scrollIntoView({behavior:"smooth"}); }catch(e){}
+  });
+};
+</script>
+</body>
+</html>
