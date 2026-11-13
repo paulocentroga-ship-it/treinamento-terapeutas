@@ -1,1 +1,1 @@
-var LOGO_B64 = "cHaQpJr4m2+Hcmg1NisSWwchLqAoA9M81kuiJq7P
+var LOGO_B64 = "UrXf8AV2up76rXKatMBg8q2BWOwJIypXfGAKHCU2
