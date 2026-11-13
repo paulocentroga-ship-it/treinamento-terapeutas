@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Treinamento — Protocolo Clínico e Documentação | Tríades Espaço Terapêutico</title>
 <style>
-  :root{--vinho:#5E1A16;--creme:#FBF6EE;--tinta:#2A2320;--ok:#2E7D32;--erro:#C62828}
+  :root{
+    --vinho:#5E1A16; --vinho2:#7A2A24; --creme:#FBF6EE; --tinta:#2A2320;
+    --ok:#2E7D32; --erro:#C62828;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--creme);color:var(--tinta);line-height:1.55}
   .faixa{background:var(--vinho);color:#fff;padding:26px 18px 30px;text-align:center}
-  .faixa .logo{height:64px;margin-bottom:10px}
+  .marca{display:inline-flex;align-items:center;gap:12px;margin-bottom:6px}
+  .marca-psi{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--vinho);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;font-family:Georgia,serif}
+  .marca-nome{font-size:1.5rem;font-weight:800;letter-spacing:3px;text-align:left;line-height:1.1}
+  .marca-sub{font-size:.68rem;letter-spacing:4.5px;opacity:.9;text-align:left}
   .faixa h1{font-size:1.35rem;font-weight:700;letter-spacing:.4px}
-  .faixa p{opacity:.92;font-size:.92rem;margin-top:6px}
-  .passos{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .passo{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border-radius:20px;padding:6px 14px;font-size:.8rem}
-  .passo.ativo{background:#fff;color:var(--vinho);font-weight:700}
-  .passo.feito{background:#2E7D32;color:#fff}
+  .faixa p{opacity:.92;font-size:.92rem;margin-top:6px;max-width:640px;margin-left:auto;margin-right:auto}
   main{max-width:860px;margin:0 auto;padding:22px 16px 60px}
   .card{background:#fff;border:1px solid #e8e0d5;border-radius:14px;padding:22px 20px;margin-bottom:18px;box-shadow:0 1px 4px rgba(94,26,22,.06)}
   .card h2{color:var(--vinho);font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -28,6 +30,7 @@
   .b{font-weight:600}
   .video-wrap{position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000}
   .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video-foto{width:100%;border-radius:10px;display:block}
   .nota{font-size:.85rem;color:#6b5d55;margin-top:8px}
   .bloco-form{display:none}
   .bloco-form.visivel{display:block;animation:ap .4s ease}
@@ -40,27 +43,28 @@
   .botoes-canvas{display:flex;gap:8px;margin-top:8px}
   button{border:0;border-radius:9px;padding:12px 18px;font-size:1rem;font-weight:600;cursor:pointer}
   .btn-sec{background:#efe6da;color:var(--vinho)}
-  .btn-pri{background:var(--vinho);color:#fff;width:100%;padding:15px;font-size:1.05rem;margin-top:18px}
+  .btn-pri{background:var(--vinho);color:#fff;width:100%;padding:15px;font-size:1.05rem;margin-top:18px;transition:opacity .2s}
   .btn-pri:disabled{opacity:.45;cursor:not-allowed}
   .erro{color:var(--erro);font-size:.85rem;margin-top:8px;display:none}
   .final{display:none;text-align:center;padding:30px 10px}
   .final.visivel{display:block}
   .final .selo{font-size:3rem}
-  .final h2{color:var(--ok);justify-content:center}
+  .final h2{color:var(--ok);border:none;justify-content:center}
   .proto{font-family:monospace;background:#f4ede2;padding:4px 10px;border-radius:6px;font-weight:700;letter-spacing:1px}
   footer{max-width:860px;margin:0 auto;padding:0 16px 30px;text-align:center;font-size:.75rem;color:#9a8b80}
 </style>
 </head>
 <body>
 <div class="faixa">
-  <img class="logo" src="logo.png" alt="Tríades Espaço Terapêutico">
+  <div class="marca">
+    <div class="marca-psi">Ψ</div>
+    <div>
+      <div class="marca-nome">TRÍADES</div>
+      <div class="marca-sub">ESPAÇO TERAPÊUTICO</div>
+    </div>
+  </div>
   <h1>TREINAMENTO — PROTOCOLO CLÍNICO E DOCUMENTAÇÃO</h1>
   <p>Tríades Espaço Terapêutico · Corpo técnico · 2026</p>
-  <div class="passos">
-    <span class="passo ativo" id="p1">1 · Teoria</span>
-    <span class="passo" id="p2">2 · Vídeo</span>
-    <span class="passo" id="p3">3 · Assinatura</span>
-  </div>
 </div>
 <main>
 
@@ -79,10 +83,10 @@
 
   <div class="card" id="card2">
     <h2><span class="num">2</span> Vídeo de treinamento</h2>
-    <div class="video-wrap">
-      <iframe id="video" title="Vídeo de treinamento" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    <div class="video-wrap" id="video-wrap">
+      <iframe id="video" src="" title="Vídeo de treinamento" allow="autoplay; fullscreen" allowfullscreen></iframe>
     </div>
-    <p class="nota" id="nota-video">Assista ao vídeo até o fim — a assinatura do termo libera automaticamente quando o vídeo terminar.</p>
+    <p class="nota" id="nota-video">Assista ao vídeo completo antes de assinar o termo.</p>
   </div>
 
   <div class="card bloco-form" id="card3">
@@ -119,31 +123,47 @@ var WEBHOOK_URL = "https://maestro.adapta.one/webhooks/generic/461e8c6253ae130a5
 var WEBHOOK_SECRET = "27b4a8d643b502c603b6fa7aece5cc965f4e7572d99deb19911d3c11fb577309";
 var VIDEO_URL = "COLOQUE_A_URL_DO_VIDEO_AQUI";
 
-/* ====== PASSOS ====== */
-function passo(n, estado){
-  var el = document.getElementById("p"+n);
-  el.className = "passo" + (estado ? " "+estado : "");
-}
-
 /* ====== LIBERAÇÃO DO FORMULÁRIO ====== */
 var liberado = false;
 function liberarFormulario(){
   if(liberado) return;
   liberado = true;
-  passo(2,"feito"); passo(3,"ativo");
   document.getElementById("card3").classList.add("visivel");
   document.getElementById("nota-video").textContent = "Vídeo concluído — agora você pode assinar o termo.";
   try{ document.getElementById("card3").scrollIntoView({behavior:"smooth"}); }catch(e){}
 }
 function iniciarVideo(){
-  var v = document.getElementById("video");
-  if(VIDEO_URL.indexOf("COLOQUE") > -1){ return; }
-  if(VIDEO_URL.indexOf("youtube")>-1 || VIDEO_URL.indexOf("youtu.be")>-1){
-    v.src = "https://www.youtube-nocookie.com/embed/" + VIDEO_URL.split(/(v=|be\/|embed\/)/).pop().substring(0,11) + "?rel=0&playsinline=1";
-  } else {
-    v.src = VIDEO_URL;
+  var wrap = document.getElementById("video-wrap");
+  if(VIDEO_URL.indexOf("COLOQUE") > -1){
+    document.getElementById("nota-video").innerHTML = "<b>Modo teste:</b> vídeo ainda não configurado — clique abaixo para liberar a assinatura.";
+    var b = document.createElement("button");
+    b.className = "btn-pri";
+    b.style.cssText = "position:absolute;top:40%;left:20%;width:60%;margin:0";
+    b.textContent = "Continuar para a assinatura (modo teste)";
+    b.onclick = liberarFormulario;
+    wrap.appendChild(b);
+    return;
   }
-  v.addEventListener("ended", liberarFormulario);
+  if(VIDEO_URL.indexOf("youtube") > -1 || VIDEO_URL.indexOf("youtu.be") > -1){
+    var id = VIDEO_URL.split(/(v=|be\/|embed\/|shorts\/)/).pop().substring(0,11);
+    var s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(s);
+    window.onYouTubeIframeAPIReady = function(){
+      new YT.Player("video", {
+        videoId: id,
+        playerVars: { rel:0, playsinline:1 },
+        events: { onStateChange: function(e){ if(e.data === YT.PlayerState.ENDED) liberarFormulario(); } }
+      });
+    };
+  } else {
+    var v = document.createElement("video");
+    v.controls = true; v.playsInline = true; v.setAttribute("playsinline","");
+    v.setAttribute("style","position:absolute;inset:0;width:100%;height:100%;border:0");
+    v.src = VIDEO_URL;
+    v.addEventListener("ended", liberarFormulario);
+    wrap.appendChild(v);
+  }
 }
 window.addEventListener("load", iniciarVideo);
 
@@ -209,7 +229,6 @@ document.getElementById("enviar").onclick = function(){
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
   }).finally(function(){
-    passo(3,"feito");
     document.getElementById("card3").classList.remove("visivel");
     document.getElementById("card4").classList.add("visivel");
     document.getElementById("protocolo").textContent = payload.protocolo;
