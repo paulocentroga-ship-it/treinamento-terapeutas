@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treinamento — Protocolo Clínico e Documentação | Tríades Espaço Terapêutico</title>
+<style>
+  :root{
+    --vinho:#5E1A16; --vinho2:#7A2A24; --creme:#FBF6EE; --tinta:#2A2320;
+    --ok:#2E7D32; --erro:#C62828;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--creme);color:var(--tinta);line-height:1.55}
+  .faixa{background:var(--vinho);color:#fff;padding:26px 18px 30px;text-align:center}
+  .faixa .logo{height:64px;margin-bottom:10px}
+  .faixa h1{font-size:1.35rem;font-weight:700;letter-spacing:.4px}
+  .passo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;font-size:.82rem;margin:12px 4px 0}
+  .passo.ativo{background:#fff;color:var(--vinho);font-weight:700}
+  .passo.feito{background:#2E7D32;color:#fff}
+  main{max-width:860px;margin:0 auto;padding:22px 16px 60px}
+  .card{background:#fff;border:1px solid #e8e0d5;border-radius:14px;padding:22px 20px;margin-bottom:18px;box-shadow:0 1px 4px rgba(94,26,22,.06)}
+  .card h2{color:var(--vinho);font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .num{background:var(--vinho);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
+  ul.regras{list-style:none}
+  ul.regras li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed #eee2d3}
+  ul.regras li:last-child{border-bottom:none}
+  ul.regras li:before{content:"✓";position:absolute;left:4px;top:9px;color:var(--ok);font-weight:700}
+  ul.regras li.vedado:before{content:"✕";color:var(--erro)}
+  .b{font-weight:600}
+  .video-wrap{position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000}
+  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .nota{font-size:.85rem;color:#6b5d55;margin-top:8px}
+  .bloco-form{display:none}
+  .bloco-form.visivel{display:block;animation:ap .4s ease}
+  @keyframes ap{from{opacity:0;transform:translateY(8px)}to{opacity:1; load...}}
+  label{display:block;font-weight:600;font-size:.9rem;mar
