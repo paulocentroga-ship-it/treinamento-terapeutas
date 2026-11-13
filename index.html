@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treinamento — Protocolo Clínico e Documentação | Tríades Espaço Terapêutico</title>
+<title>Treinamento — Envio de Notas Fiscais | Tríades Espaço Terapêutico</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root{
-    --vinho:#5E1A16; --vinho2:#7A2A24; --creme:#FBF6EE; --tinta:#2A2320;
-    --ok:#2E7D32; --erro:#C62828;
-  }
+  :root{--vinho:#5E1A16;--creme:#FBF6EE;--tinta:#2A2320;--ok:#2E7D32;--erro:#C62828}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--creme);color:var(--tinta);line-height:1.55}
   .faixa{background:var(--vinho);color:#fff;padding:26px 18px 30px;text-align:center}
@@ -16,40 +14,57 @@
   .marca-psi{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--vinho);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;font-family:Georgia,serif}
   .marca-nome{font-size:1.5rem;font-weight:800;letter-spacing:3px;text-align:left;line-height:1.1}
   .marca-sub{font-size:.68rem;letter-spacing:4.5px;opacity:.9;text-align:left}
-  .faixa h1{font-size:1.35rem;font-weight:700;letter-spacing:.4px}
-  .faixa p{opacity:.92;font-size:.92rem;margin-top:6px;max-width:640px;margin-left:auto;margin-right:auto}
+  .faixa h1{font-size:1.3rem;font-weight:700;letter-spacing:.4px}
+  .faixa p{opacity:.92;font-size:.92rem;margin-top:6px}
   main{max-width:860px;margin:0 auto;padding:22px 16px 60px}
   .card{background:#fff;border:1px solid #e8e0d5;border-radius:14px;padding:22px 20px;margin-bottom:18px;box-shadow:0 1px 4px rgba(94,26,22,.06)}
   .card h2{color:var(--vinho);font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
   .num{background:var(--vinho);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
-  ul.regras{list-style:none}
-  ul.regras li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed #eee2d3}
-  ul.regras li:last-child{border-bottom:none}
-  ul.regras li:before{content:"✓";position:absolute;left:4px;top:9px;color:var(--ok);font-weight:700}
-  ul.regras li.vedado:before{content:"✕";color:var(--erro)}
+  .passo{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed #eee2d3}
+  .passo:last-child{border-bottom:none}
+  .passo .n{background:#efe6da;color:var(--vinho);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+  .passo .t b{display:block;color:var(--vinho);margin-bottom:2px}
+  .passo .t{font-size:.95rem}
+  ul.resumo{list-style:none;margin-top:6px}
+  ul.resumo li{padding:7px 0 7px 28px;position:relative;border-bottom:1px dashed #eee2d3;font-size:.93rem}
+  ul.resumo li:last-child{border-bottom:none}
+  ul.resumo li:before{content:"✓";position:absolute;left:2px;top:7px;color:var(--ok);font-weight:700}
+  .termo{background:#fffdf9;border:1.5px solid #d8cfc2;border-radius:10px;padding:16px;font-size:.9rem;margin:12px 0}
+  .termo h3{text-align:center;color:var(--vinho);margin-bottom:10px;font-size:1rem}
+  .termo ol{margin-left:18px}
+  .termo ol li{margin-bottom:6px}
+  .termo .final{text-align:center;font-style:italic;margin-top:10px}
   .b{font-weight:600}
-  .video-wrap{position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000}
-  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .video-foto{width:100%;border-radius:10px;display:block}
-  .nota{font-size:.85rem;color:#6b5d55;margin-top:8px}
   .bloco-form{display:none}
   .bloco-form.visivel{display:block;animation:ap .4s ease}
   @keyframes ap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 5px}
   input[type=text]{width:100%;padding:11px 12px;border:1.5px solid #d8cfc2;border-radius:9px;font-size:1rem;background:#fffdf9}
   input[type=text]:focus{outline:none;border-color:var(--vinho)}
-  .aviso{background:#FFF8E1;border:1px solid #F0DFA0;border-radius:9px;padding:10px 12px;font-size:.85rem;margin-top:10px}
-  canvas{width:100%;height:180px;border:1.5px dashed #c9b8a8;border-radius:9px;background:#fffdf9;touch-action:none;cursor:crosshair}
-  .botoes-canvas{display:flex;gap:8px;margin-top:8px}
-  button{border:0;border-radius:9px;padding:12px 18px;font-size:1rem;font-weight:600;cursor:pointer}
-  .btn-sec{background:#efe6da;color:var(--vinho)}
-  .btn-pri{background:var(--vinho);color:#fff;width:100%;padding:15px;font-size:1.05rem;margin-top:18px;transition:opacity .2s}
+  .check{display:flex;align-items:flex-start;gap:10px;margin:16px 0 4px;font-size:.92rem}
+  .check input{width:20px;height:20px;margin-top:2px;accent-color:var(--vinho)}
+  .opcoes-assinatura{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  button{border:0;border-radius:9px;padding:12px 18px;font-size:.95rem;font-weight:600;cursor:pointer}
+  .btn-opc{background:#efe6da;color:var(--vinho);flex:1;min-width:200px}
+  .btn-opc.sel{background:var(--vinho);color:#fff}
+  .btn-pri{background:var(--vinho);color:#fff;width:100%;padding:15px;font-size:1.05rem;margin-top:18px}
   .btn-pri:disabled{opacity:.45;cursor:not-allowed}
+  .govbr-box{display:none;background:#F1F8E9;border:1.5px solid #AED581;border-radius:10px;padding:14px;margin-top:14px;font-size:.9rem}
+  .govbr-box.visivel{display:block}
+  .govbr-box ol{margin:8px 0 8px 20px}
+  .govbr-box a{color:#33691E;font-weight:700}
+  input[type=file]{width:100%;padding:10px;border:1.5px dashed #8BC34A;border-radius:9px;background:#fff;font-size:.9rem;margin-top:8px}
+  canvas{width:100%;height:180px;border:1.5px dashed #c9b8a8;border-radius:9px;background:#fffdf9;touch-action:none;cursor:crosshair;display:none}
+  canvas.visivel{display:block}
+  .botoes-canvas{display:none;gap:8px;margin-top:8px}
+  .botoes-canvas.visivel{display:flex}
+  .btn-sec{background:#efe6da;color:var(--vinho)}
+  .aviso{background:#FFF8E1;border:1px solid #F0DFA0;border-radius:9px;padding:10px 12px;font-size:.85rem;margin-top:10px}
   .erro{color:var(--erro);font-size:.85rem;margin-top:8px;display:none}
   .final{display:none;text-align:center;padding:30px 10px}
   .final.visivel{display:block}
   .final .selo{font-size:3rem}
-  .final h2{color:var(--ok);border:none;justify-content:center}
+  .final h2{color:var(--ok);justify-content:center}
   .proto{font-family:monospace;background:#f4ede2;padding:4px 10px;border-radius:6px;font-weight:700;letter-spacing:1px}
   footer{max-width:860px;margin:0 auto;padding:0 16px 30px;text-align:center;font-size:.75rem;color:#9a8b80}
 </style>
@@ -63,47 +78,110 @@
       <div class="marca-sub">ESPAÇO TERAPÊUTICO</div>
     </div>
   </div>
-  <h1>TREINAMENTO — PROTOCOLO CLÍNICO E DOCUMENTAÇÃO</h1>
-  <p>Tríades Espaço Terapêutico · Corpo técnico · 2026</p>
+  <h1>TREINAMENTO — ENVIO DE NOTAS FISCAIS</h1>
+  <p>Passo a passo do sistema para prestadores · Tríades Espaço Terapêutico · 2026</p>
 </div>
 <main>
 
   <div class="card" id="card1">
-    <h2><span class="num">1</span> Treinamento teórico</h2>
-    <p>Este treinamento registra a sua ciência sobre as regras de <span class="b">registro clínico e documentação</span> da clínica. Leia com atenção as regras abaixo — elas valem para todas as sessões, em todos os polos.</p>
-    <ul class="regras">
-      <li><span class="b">Registre no mesmo dia.</span> A evolução é feita no dia da sessão, com data e horário compatíveis com o atendimento realizado.</li>
-      <li class="vedado"><span class="b">Não registre sessão que não aconteceu.</span> Registro retroativo e lançamento de sessão não executada são vedados.</li>
-      <li class="vedado"><span class="b">Não registre sessões sobrepostas.</span> O mesmo paciente não pode ter duas sessões no mesmo dia e horário — nem na mesma guia, nem em guias diferentes.</li>
-      <li><span class="b">Ausência é ausência.</span> Sessão não realizada é registrada como falta, nunca como sessão executada.</li>
-      <li><span class="b">Guia = realidade.</span> O que vai para a guia/faturamento precisa refletir exatamente o que foi executado.</li>
-      <li><span class="b">Assine o que é seu.</span> Só assina o profissional que executou o atendimento.</li>
-    </ul>
+    <h2><span class="num">1</span> Passo a passo no sistema</h2>
+    <div class="passo">
+      <div class="n">1</div>
+      <div class="t"><b>Entre no seu perfil e acesse o dashboard.</b> Ao entrar no sistema com o seu login, você chega ao painel principal (dashboard).</div>
+    </div>
+    <div class="passo">
+      <div class="n">2</div>
+      <div class="t"><b>Abra a aba lateral e clique em "Financeiro".</b> O menu lateral fica na borda esquerda da tela. Localize e clique na opção <span class="b">Financeiro</span>.</div>
+    </div>
+    <div class="passo">
+      <div class="n">3</div>
+      <div class="t"><b>Confira a mensuração do seu contrato.</b> A tela Financeiro abre mostrando a mensuração do seu contrato, com as informações específicas (valores e competências). Você pode <span class="b">visualizar o PDF</span> e <span class="b">baixá-lo</span> para conferência.</div>
+    </div>
+    <div class="passo">
+      <div class="n">4</div>
+      <div class="t"><b>Role a tela até "Enviar Nota Fiscal" e clique.</b> Um pouco abaixo da mensuração fica o botão de envio da nota fiscal. Ao clicar, abre o formulário de referência.</div>
+    </div>
+    <div class="passo">
+      <div class="n">5</div>
+      <div class="t"><b>Preencha o formulário de referência.</b> São quatro campos: <span class="b">mês de referência</span> (mês ao qual a nota se refere), <span class="b">número da NF</span>, <span class="b">valor da NF</span> e o <span class="b">upload do arquivo da nota</span> (obrigatório). Há ainda um campo de <span class="b">observação</span>, opcional.</div>
+    </div>
+    <div class="passo">
+      <div class="n">6</div>
+      <div class="t"><b>Envie e aguarde a análise.</b> Depois de enviar, a nota passa por <span class="b">aprovação ou reprovação</span> pela pessoa responsável dentro do sistema. Você acompanha o resultado no mesmo local.</div>
+    </div>
   </div>
 
   <div class="card" id="card2">
-    <h2><span class="num">2</span> Vídeo de treinamento</h2>
-    <div class="video-wrap" id="video-wrap">
-      <iframe id="video" src="" title="Vídeo de treinamento" allow="autoplay; fullscreen" allowfullscreen></iframe>
-    </div>
-    <p class="nota" id="nota-video">Assista ao vídeo completo antes de assinar o termo.</p>
+    <h2><span class="num">2</span> Resumo para anotação</h2>
+    <p style="font-size:.93rem">Use esta lista como consulta rápida todo mês:</p>
+    <ul class="resumo">
+      <li>Perfil → Dashboard → aba lateral → <b>Financeiro</b></li>
+      <li>Conferir a <b>mensuração do contrato</b> (visualizar/baixar o PDF)</li>
+      <li>Rolar até <b>"Enviar Nota Fiscal"</b> e clicar</li>
+      <li>Preencher: <b>mês de referência · número da NF · valor da NF</b></li>
+      <li>Anexar o <b>arquivo da NF</b> (upload obrigatório) — observação é opcional</li>
+      <li>Enviar e <b>aguardar aprovação/reprovação</b> da gestão no sistema</li>
+    </ul>
+    <p style="font-size:.9rem;margin-top:12px">⚠️ Os dados do formulário devem corresponder <span class="b">exatamente</span> à nota emitida: valor e competência divergentes implicam reprovação e reenvio.</p>
   </div>
 
-  <div class="card bloco-form" id="card3">
+  <div class="card" id="card3">
     <h2><span class="num">3</span> Termo de ciência e concordância</h2>
-    <p>Ao assinar, você declara que <span class="b">leu as regras, assistiu ao vídeo e está ciente e de acordo</span> com o protocolo de documentação clínica da Tríades.</p>
-    <label for="nome">Nome completo</label>
-    <input type="text" id="nome" autocomplete="name" placeholder="Como consta no seu contrato">
-    <label for="cpf">CPF</label>
-    <input type="text" id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00">
-    <label>Sua assinatura (desenhe no espaço abaixo)</label>
-    <canvas id="canvas" width="800" height="260"></canvas>
-    <div class="botoes-canvas">
-      <button type="button" class="btn-sec" id="limpar">Limpar assinatura</button>
+    <div class="termo">
+      <h3>TERMO DE CIÊNCIA E CONCORDÂNCIA<br>TREINAMENTO: ENVIO DE NOTAS FISCAIS</h3>
+      <p>Eu, <span class="b" id="t-nome">[NOME]</span>, inscrito(a) no CPF sob o nº <span class="b" id="t-cpf">[CPF]</span>, profissional prestador(a) de serviços da <span class="b">TRÍADES ESPAÇO TERAPÊUTICO</span>, declaro que participei do treinamento sobre envio de notas fiscais pelo sistema da clínica e declaro ciência e concordância com o seguinte:</p>
+      <ol>
+        <li>A nota fiscal de cada mês deve ser emitida e enviada pelo sistema (aba <b>Financeiro</b> → <b>Enviar Nota Fiscal</b>), informando mês de referência, número da NF, valor da NF e o arquivo da nota (upload obrigatório).</li>
+        <li>Os dados informados devem corresponder exatamente à nota fiscal emitida; divergência de valor ou de competência implica reprovação e reenvio.</li>
+        <li>Todo envio está sujeito a aprovação pela gestão da clínica, dentro do próprio sistema; em caso de reprovação, a nota deverá ser corrigida e reenviada.</li>
+        <li>A mensuração do contrato, disponível na aba Financeiro, é o referencial para conferência dos valores devidos, podendo ser visualizada e baixada em PDF.</li>
+        <li>A assinatura deste termo registra a participação no treinamento e a ciência do fluxo descrito, valendo como registro para fins de auditoria interna e prestação de contas.</li>
+      </ol>
+      <p class="final">Imperatriz/MA, ____ de ______________ de 2026.</p>
     </div>
-    <div class="aviso">Sua assinatura tem caráter de <span class="b">declaração formal de ciência</span> e fica registrada com data, hora e protocolo, valendo como registro de treinamento para fins de auditoria.</div>
-    <div class="erro" id="erro"></div>
-    <button class="btn-pri" id="enviar">Assinar termo e enviar</button>
+
+    <div class="check">
+      <input type="checkbox" id="confirma">
+      <label for="confirma" style="margin:0;font-weight:400">Declaro que <span class="b">li o passo a passo</span>, <span class="b">li o termo</span> acima e estou ciente e de acordo com todo o seu conteúdo.</label>
+    </div>
+
+    <div class="bloco-form" id="form-dados">
+      <label for="nome">Nome completo</label>
+      <input type="text" id="nome" autocomplete="name" placeholder="Como consta no contrato">
+      <label for="cpf">CPF</label>
+      <input type="text" id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00">
+
+      <label>Forma de assinatura</label>
+      <div class="opcoes-assinatura">
+        <button type="button" class="btn-opc" id="opc-govbr">🏛️ Assinar com Gov.br (recomendado)</button>
+        <button type="button" class="btn-opc" id="opc-desenho">✍️ Assinar aqui mesmo (desenho)</button>
+      </div>
+
+      <div class="govbr-box" id="box-govbr">
+        <p><b>Como assinar com Gov.br:</b></p>
+        <ol>
+          <li>Clique no botão abaixo — o termo em PDF será gerado e <b>baixado automaticamente</b> com os seus dados.</li>
+          <li>Acesse o <a href="https://assinador.iti.br/" target="_blank" rel="noopener">Assinador Digital Gov.br (assinador.iti.br)</a>, faça login com sua conta Gov.br (nível prata ou ouro) e envie o PDF baixado para assinar.</li>
+          <li>Baixe o PDF <b>assinado</b> e volte aqui: envie o arquivo assinado no campo abaixo.</li>
+        </ol>
+        <button type="button" class="btn-opc" id="gerar-pdf" style="width:100%">📄 Gerar e baixar o termo em PDF</button>
+        <label style="margin-top:12px">Envie aqui o PDF assinado no Gov.br (obrigatório)</label>
+        <input type="file" id="pdf-assinado" accept="application/pdf,.pdf">
+        <p id="pdf-status" style="font-size:.85rem;color:#33691E;margin-top:6px"></p>
+      </div>
+
+      <div id="box-desenho">
+        <label style="margin-top:14px">Sua assinatura (desenhe no espaço abaixo)</label>
+        <canvas id="canvas" width="800" height="260"></canvas>
+        <div class="botoes-canvas" id="botoes-canvas">
+          <button type="button" class="btn-sec" id="limpar">Limpar assinatura</button>
+        </div>
+      </div>
+
+      <div class="aviso">Sua assinatura tem caráter de <span class="b">declaração formal de ciência</span> e fica registrada com data, hora e protocolo, valendo como registro de treinamento para fins de auditoria.</div>
+      <div class="erro" id="erro"></div>
+      <button class="btn-pri" id="enviar">Assinar termo e enviar</button>
+    </div>
   </div>
 
   <div class="card final" id="card4">
@@ -111,61 +189,122 @@
     <h2>Termo assinado com sucesso</h2>
     <p>Recebemos a sua assinatura. Guarde o número do protocolo — ele comprova a sua participação neste treinamento:</p>
     <p style="margin:14px 0"><span class="proto" id="protocolo">—</span></p>
-    <p class="nota">O documento assinado já foi encaminhado à gestão da clínica.</p>
+    <p style="font-size:.85rem;color:#6b5d55">O documento assinado já foi encaminhado à gestão da clínica.</p>
   </div>
 
 </main>
-<footer>Tríades Espaço Terapêutico · Documento interno · v1 — novembro/2026</footer>
+<footer>Tríades Espaço Terapêutico · Documento interno · v2 — novembro/2026</footer>
 
 <script>
 /* ====== CONFIGURAÇÃO ====== */
 var WEBHOOK_URL = "https://maestro.adapta.one/webhooks/generic/461e8c6253ae130a5811eb66ad336c42b7597436f1566a7e4d0d7e72b5d2ccac";
 var WEBHOOK_SECRET = "27b4a8d643b502c603b6fa7aece5cc965f4e7572d99deb19911d3c11fb577309";
-var VIDEO_URL = "COLOQUE_A_URL_DO_VIDEO_AQUI";
 
-/* ====== LIBERAÇÃO DO FORMULÁRIO ====== */
-var liberado = false;
-function liberarFormulario(){
-  if(liberado) return;
-  liberado = true;
-  document.getElementById("card3").classList.add("visivel");
-  document.getElementById("nota-video").textContent = "Vídeo concluído — agora você pode assinar o termo.";
-  try{ document.getElementById("card3").scrollIntoView({behavior:"smooth"}); }catch(e){}
+/* ====== CHECKBOX LIBERA O FORMULÁRIO ====== */
+document.getElementById("confirma").addEventListener("change", function(){
+  document.getElementById("form-dados").classList.toggle("visivel", this.checked);
+  if(this.checked){ try{ document.getElementById("form-dados").scrollIntoView({behavior:"smooth"}); }catch(e){} }
+});
+
+/* ====== NOME/CPF REFLETEM NO TERMO ====== */
+function atualizaTermo(){
+  document.getElementById("t-nome").textContent = document.getElementById("nome").value.trim() || "[NOME]";
+  document.getElementById("t-cpf").textContent = document.getElementById("cpf").value.trim() || "[CPF]";
 }
-function iniciarVideo(){
-  var wrap = document.getElementById("video-wrap");
-  if(VIDEO_URL.indexOf("COLOQUE") > -1){
-    document.getElementById("nota-video").innerHTML = "<b>Modo teste:</b> vídeo ainda não configurado — clique abaixo para liberar a assinatura.";
-    var b = document.createElement("button");
-    b.className = "btn-pri";
-    b.style.cssText = "position:absolute;top:40%;left:20%;width:60%;margin:0";
-    b.textContent = "Continuar para a assinatura (modo teste)";
-    b.onclick = liberarFormulario;
-    wrap.appendChild(b);
-    return;
-  }
-  if(VIDEO_URL.indexOf("youtube") > -1 || VIDEO_URL.indexOf("youtu.be") > -1){
-    var id = VIDEO_URL.split(/(v=|be\/|embed\/|shorts\/)/).pop().substring(0,11);
-    var s = document.createElement("script");
-    s.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(s);
-    window.onYouTubeIframeAPIReady = function(){
-      new YT.Player("video", {
-        videoId: id,
-        playerVars: { rel:0, playsinline:1 },
-        events: { onStateChange: function(e){ if(e.data === YT.PlayerState.ENDED) liberarFormulario(); } }
-      });
-    };
-  } else {
-    var v = document.createElement("video");
-    v.controls = true; v.playsInline = true; v.setAttribute("playsinline","");
-    v.setAttribute("style","position:absolute;inset:0;width:100%;height:100%;border:0");
-    v.src = VIDEO_URL;
-    v.addEventListener("ended", liberarFormulario);
-    wrap.appendChild(v);
-  }
+document.getElementById("nome").addEventListener("input", atualizaTermo);
+document.getElementById("cpf").addEventListener("input", function(){
+  var v = this.value.replace(/\D/g,"").slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/,"$1.$2.$3-$4");
+  this.value = v; atualizaTermo();
+});
+
+/* ====== ESCOLHA DA ASSINATURA ====== */
+var modo = null;
+document.getElementById("opc-govbr").onclick = function(){
+  modo = "govbr";
+  this.classList.add("sel"); document.getElementById("opc-desenho").classList.remove("sel");
+  document.getElementById("box-govbr").classList.add("visivel");
+  document.getElementById("box-desenho").style.display = "none";
+};
+document.getElementById("opc-desenho").onclick = function(){
+  modo = "desenho";
+  this.classList.add("sel"); document.getElementById("opc-govbr").classList.remove("sel");
+  document.getElementById("box-govbr").classList.remove("visivel");
+  document.getElementById("box-desenho").style.display = "block";
+  document.getElementById("canvas").classList.add("visivel");
+  document.getElementById("botoes-canvas").classList.add("visivel");
+};
+
+/* ====== GERAÇÃO DO PDF DO TERMO (jsPDF) ====== */
+function protocolo(){
+  var d = new Date();
+  function p(n){ return String(n).padStart(2,"0"); }
+  return "TRT-" + d.getFullYear() + p(d.getMonth()+1) + p(d.getDate()) + "-" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
 }
-window.addEventListener("load", iniciarVideo);
+document.getElementById("gerar-pdf").onclick = function(){
+  var nome = document.getElementById("nome").value.trim();
+  var cpf = document.getElementById("cpf").value.trim();
+  var erro = document.getElementById("erro");
+  erro.style.display = "none";
+  if(nome.split(" ").filter(Boolean).length < 2){ erro.textContent="Digite o nome completo antes de gerar o PDF."; erro.style.display="block"; return; }
+  if(cpf.replace(/\D/g,"").length !== 11){ erro.textContent="Digite o CPF com 11 números antes de gerar o PDF."; erro.style.display="block"; return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({unit:"mm", format:"a4"});
+  var m = 20, w = 170, y = 30;
+  doc.setFont("helvetica","bold"); doc.setFontSize(13);
+  doc.text("TRÍADES ESPAÇO TERAPÊUTICO", 105, y, {align:"center"}); y += 8;
+  doc.setFont("helvetica","normal"); doc.setFontSize(9);
+  doc.text("Clínica multidisciplinar — 3 polos", 105, y, {align:"center"}); y += 10;
+  doc.setLineWidth(0.4); doc.line(m, y, m+w, y); y += 10;
+  doc.setFont("helvetica","bold"); doc.setFontSize(12);
+  doc.text("TERMO DE CIÊNCIA E CONCORDÂNCIA", 105, y, {align:"center"}); y += 6;
+  doc.setFont("helvetica","normal"); doc.setFontSize(10);
+  doc.text("Treinamento: Envio de Notas Fiscais", 105, y, {align:"center"}); y += 10;
+  var texto = "Eu, " + nome + ", inscrito(a) no CPF sob o nº " + cpf + ", profissional prestador(a) de serviços da TRÍADES ESPAÇO TERAPÊUTICO, declaro que participei do treinamento sobre envio de notas fiscais pelo sistema da clínica e declaro ciência e concordância com o seguinte:";
+  doc.setFontSize(10.5);
+  var linhas = doc.splitTextToSize(texto, w);
+  doc.text(linhas, m, y); y += linhas.length * 5.5 + 3;
+  var itens = [
+    "1. A nota fiscal de cada mês deve ser emitida e enviada pelo sistema (aba Financeiro - Enviar Nota Fiscal), informando mês de referência, número da NF, valor da NF e o arquivo da nota (upload obrigatório).",
+    "2. Os dados informados devem corresponder exatamente à nota fiscal emitida; divergência de valor ou de competência implica reprovação e reenvio.",
+    "3. Todo envio está sujeito a aprovação pela gestão da clínica, dentro do próprio sistema; em caso de reprovação, a nota deverá ser corrigida e reenviada.",
+    "4. A mensuração do contrato, disponível na aba Financeiro, é o referencial para conferência dos valores devidos, podendo ser visualizada e baixada em PDF.",
+    "5. A assinatura deste termo registra a participação no treinamento e a ciência do fluxo descrito, valendo como registro para fins de auditoria interna e prestação de contas."
+  ];
+  itens.forEach(function(it){
+    var l = doc.splitTextToSize(it, w);
+    doc.text(l, m, y); y += l.length * 5.5 + 2;
+  });
+  y += 4;
+  doc.setFontSize(9.5);
+  doc.text("Assinatura registrada em: " + new Date().toLocaleString("pt-BR") + " (horário de Brasília)", m, y); y += 6;
+  doc.text("Protocolo: " + protocolo() + "   ·   Versão do treinamento: v2 — 11/2026", m, y); y += 12;
+  doc.setDrawColor(120); doc.setLineWidth(0.3); doc.line(m, y, m+80, y); y += 6;
+  doc.text(nome, m, y); y += 5;
+  doc.setFontSize(8.5);
+  doc.text("CPF " + cpf, m, y);
+  var nomeArq = "Termo_Ciencia_NotasFiscais_" + nome.split(" ")[0] + "_" + cpf.replace(/\D/g,"").slice(0,3) + ".pdf";
+  doc.save(nomeArq);
+  document.getElementById("pdf-status").textContent = "✅ PDF gerado e baixado: " + nomeArq + " — assine no Gov.br e envie o arquivo assinado abaixo.";
+};
+
+/* ====== ARQUIVO PDF ASSINADO ====== */
+var pdfAssinadoB64 = null, pdfAssinadoNome = null;
+document.getElementById("pdf-assinado").addEventListener("change", function(){
+  var f = this.files[0];
+  if(!f){ pdfAssinadoB64 = null; document.getElementById("pdf-status").textContent = ""; return; }
+  if(!/\.pdf$/i.test(f.name) && f.type !== "application/pdf"){
+    document.getElementById("pdf-status").textContent = "⚠️ Envie um arquivo PDF.";
+    pdfAssinadoB64 = null; return;
+  }
+  pdfAssinadoNome = f.name;
+  var r = new FileReader();
+  r.onload = function(){
+    pdfAssinadoB64 = r.result.split(",")[1];
+    document.getElementById("pdf-status").textContent = "✅ PDF assinado carregado: " + pdfAssinadoNome;
+  };
+  r.readAsDataURL(f);
+});
 
 /* ====== ASSINATURA NO CANVAS ====== */
 var cv = document.getElementById("canvas"), ctx = cv.getContext("2d");
@@ -191,38 +330,27 @@ cv.addEventListener("touchmove",movimento,{passive:false});
 window.addEventListener("touchend",fim);
 document.getElementById("limpar").onclick=function(){ ctx.clearRect(0,0,cv.width,cv.height); temTinta=false; };
 
-/* ====== MÁSCARA CPF ====== */
-document.getElementById("cpf").addEventListener("input", function(){
-  var v = this.value.replace(/\D/g,"").slice(0,11);
-  v = v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/,"$1.$2.$3-$4");
-  this.value = v;
-});
-
 /* ====== ENVIO ====== */
-function protocolo(){
-  var d = new Date();
-  function p(n){ return String(n).padStart(2,"0"); }
-  return "TRT-" + d.getFullYear() + p(d.getMonth()+1) + p(d.getDate()) + "-" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
-}
 document.getElementById("enviar").onclick = function(){
   var nome = document.getElementById("nome").value.trim();
   var cpf  = document.getElementById("cpf").value.trim();
   var erro = document.getElementById("erro");
   erro.style.display = "none";
-  if(nome.split(" ").filter(Boolean).length < 2){ erro.textContent="Digite o nome completo."; erro.style.display="block"; return; }
-  if(cpf.replace(/\D/g,"").length !== 11){ erro.textContent="Digite o CPF com 11 números."; erro.style.display="block"; return; }
-  if(!temTinta){ erro.textContent="Desenhe a sua assinatura no quadro."; erro.style.display="block"; return; }
+  if(!modo){ erro.textContent="Escolha a forma de assinatura: Gov.br ou desenho."; erro.style.display="block"; return; }
+  if(modo === "govbr" && !pdfAssinadoB64){ erro.textContent="Gere o PDF, assine no Gov.br e envie o arquivo assinado."; erro.style.display="block"; return; }
+  if(modo === "desenho" && !temTinta){ erro.textContent="Desenhe a sua assinatura no quadro."; erro.style.display="block"; return; }
   var btn = this; btn.disabled = true; btn.textContent = "Enviando…";
   var payload = {
-    tipo: "assinatura_treinamento",
+    tipo: modo === "govbr" ? "termo_govbr" : "assinatura_treinamento",
     protocolo: protocolo(),
     nome: nome, cpf: cpf,
-    assinatura: cv.toDataURL("image/png"),
     data_envio: new Date().toISOString(),
-    versao_treinamento: "v1 — 11/2026",
+    versao_treinamento: "v2 — Envio de Notas Fiscais, 11/2026",
     user_agent: navigator.userAgent,
     pagina: location.href
   };
+  if(modo === "govbr"){ payload.pdf_assinado = pdfAssinadoB64; payload.pdf_nome = pdfAssinadoNome; }
+  else { payload.assinatura = cv.toDataURL("image/png"); }
   fetch(WEBHOOK_URL + "?secret=" + WEBHOOK_SECRET, {
     method: "POST",
     mode: "no-cors",
