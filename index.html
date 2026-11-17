@@ -309,6 +309,8 @@ document.getElementById("pdf-assinado").addEventListener("change", function(){
 /* ====== ASSINATURA NO CANVAS ====== */
 var cv = document.getElementById("canvas"), ctx = cv.getContext("2d");
 var desenhando = false, temTinta = false;
+function pintaFundo(){ ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,cv.width,cv.height); }
+pintaFundo();
 function pos(e){
   var r = cv.getBoundingClientRect();
   var p = e.touches ? e.touches[0] : e;
@@ -328,7 +330,7 @@ window.addEventListener("mouseup",fim);
 cv.addEventListener("touchstart",inicio,{passive:false});
 cv.addEventListener("touchmove",movimento,{passive:false});
 window.addEventListener("touchend",fim);
-document.getElementById("limpar").onclick=function(){ ctx.clearRect(0,0,cv.width,cv.height); temTinta=false; };
+document.getElementById("limpar").onclick=function(){ ctx.clearRect(0,0,cv.width,cv.height); pintaFundo(); temTinta=false; };
 
 /* ====== ENVIO ====== */
 document.getElementById("enviar").onclick = function(){
@@ -338,7 +340,16 @@ document.getElementById("enviar").onclick = function(){
   erro.style.display = "none";
   if(!modo){ erro.textContent="Escolha a forma de assinatura: Gov.br ou desenho."; erro.style.display="block"; return; }
   if(modo === "govbr" && !pdfAssinadoB64){ erro.textContent="Gere o PDF, assine no Gov.br e envie o arquivo assinado."; erro.style.display="block"; return; }
-  if(modo === "desenho" && !temTinta){ erro.textContent="Desenhe a sua assinatura no quadro."; erro.style.display="block"; return; }
+  if(modo === "desenho"){
+    var tintaReal = false;
+    try{
+      var d = ctx.getImageData(0,0,cv.width,cv.height).data;
+      var nEscuros = 0;
+      for(var i=0;i<d.length;i+=16){ if(d[i]+d[i+1]+d[i+2] < 250) nEscuros++; }
+      tintaReal = nEscuros >= 30;
+    }catch(e){ tintaReal = temTinta; }
+    if(!tintaReal){ erro.textContent="Não conseguimos capturar a sua assinatura — desenhe novamente e toque em Assinar."; erro.style.display="block"; return; }
+  }
   var btn = this; btn.disabled = true; btn.textContent = "Enviando…";
   var payload = {
     tipo: modo === "govbr" ? "termo_govbr" : "assinatura_treinamento",
@@ -346,19 +357,15 @@ document.getElementById("enviar").onclick = function(){
     nome: nome, cpf: cpf,
     data_envio: new Date().toISOString(),
     versao_treinamento: "v2 — Envio de Notas Fiscais, 11/2026",
-    build: "2026-11-13-17:31-jpeg",
+    build: "2026-11-17-17:20-jpeg-canvas",
     user_agent: navigator.userAgent,
     pagina: location.href
   };
   if(modo === "govbr"){ payload.pdf_assinado = pdfAssinadoB64; payload.pdf_nome = pdfAssinadoNome; }
   else {
-    // JPEG com fundo branco: robusto para o decodificador do webhook e ~5x menor
-    var tmp = document.createElement("canvas");
-    tmp.width = cv.width; tmp.height = cv.height;
-    var tctx = tmp.getContext("2d");
-    tctx.fillStyle = "#ffffff"; tctx.fillRect(0,0,tmp.width,tmp.height);
-    tctx.drawImage(cv,0,0);
-    payload.assinatura = tmp.toDataURL("image/jpeg", 0.75);
+    // JPEG direto do canvas principal (fundo já é branco) — evita o bug do iOS
+    // que perde áreas do desenho ao copiar para um segundo canvas
+    payload.assinatura = cv.toDataURL("image/jpeg", 0.8);
   }
   fetch(WEBHOOK_URL + "?secret=" + WEBHOOK_SECRET, {
     method: "POST",
