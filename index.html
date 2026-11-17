@@ -55,6 +55,7 @@
   .govbr-box a{color:#33691E;font-weight:700}
   input[type=file]{width:100%;padding:10px;border:1.5px dashed #8BC34A;border-radius:9px;background:#fff;font-size:.9rem;margin-top:8px}
   canvas{width:100%;height:180px;border:1.5px dashed #c9b8a8;border-radius:9px;background:#fffdf9;touch-action:none;cursor:crosshair;display:none}
+  @media (max-width:600px){ canvas{height:230px} }
   canvas.visivel{display:block}
   .botoes-canvas{display:none;gap:8px;margin-top:8px}
   .botoes-canvas.visivel{display:flex}
@@ -190,6 +191,7 @@
     <p>Recebemos a sua assinatura. Guarde o número do protocolo — ele comprova a sua participação neste treinamento:</p>
     <p style="margin:14px 0"><span class="proto" id="protocolo">—</span></p>
     <p style="font-size:.85rem;color:#6b5d55">O documento assinado já foi encaminhado à gestão da clínica.</p>
+    <button type="button" class="btn-sec" id="reenviar" style="margin-top:10px">🔁 Reenviar por garantia (se a gestão não recebeu)</button>
   </div>
 
 </main>
@@ -236,6 +238,10 @@ document.getElementById("opc-desenho").onclick = function(){
 };
 
 /* ====== GERAÇÃO DO PDF DO TERMO (jsPDF) ====== */
+var enviado = false, ultimoPayload = null;
+window.addEventListener("beforeunload", function(e){
+  if(temTinta && !enviado){ e.preventDefault(); e.returnValue = ""; return "Sua assinatura não foi enviada ainda."; }
+});
 function protocolo(){
   var d = new Date();
   function p(n){ return String(n).padStart(2,"0"); }
@@ -357,7 +363,7 @@ document.getElementById("enviar").onclick = function(){
     nome: nome, cpf: cpf,
     data_envio: new Date().toISOString(),
     versao_treinamento: "v2 — Envio de Notas Fiscais, 11/2026",
-    build: "2026-11-17-17:20-jpeg-canvas",
+    build: "2026-11-17-17:40-v3",
     user_agent: navigator.userAgent,
     pagina: location.href
   };
@@ -373,10 +379,22 @@ document.getElementById("enviar").onclick = function(){
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
   }).finally(function(){
+    enviado = true; ultimoPayload = payload;
     document.getElementById("card3").classList.remove("visivel");
     document.getElementById("card4").classList.add("visivel");
     document.getElementById("protocolo").textContent = payload.protocolo;
     try{ document.getElementById("card4").scrollIntoView({behavior:"smooth"}); }catch(e){}
+  });
+};
+document.getElementById("reenviar").onclick = function(){
+  if(!ultimoPayload) return;
+  var b = this; b.disabled = true; b.textContent = "Reenviando…";
+  fetch(WEBHOOK_URL + "?secret=" + WEBHOOK_SECRET, {
+    method: "POST", mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(ultimoPayload)
+  }).finally(function(){
+    b.disabled = false; b.textContent = "✅ Reenviado";
   });
 };
 </script>
